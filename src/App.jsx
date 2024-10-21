@@ -158,7 +158,9 @@ function App() {
             {/* Audios */}
             <audio
               ref={audioRef}
-              src={`https://www.partyvibe.com:${station}/;listen.pls?sid=1`}
+              src={`${
+                import.meta.env.VITE_RADIO_URL
+              }:${station}/;listen.pls?sid=1`}
               onCanPlay={handleCanPlay}
             />
 
