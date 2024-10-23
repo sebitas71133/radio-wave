@@ -15,19 +15,9 @@ export const handler = async (event) => {
   try {
     const response = await axios.get(url);
 
-    // Verifica que la respuesta sea la esperada
-    if (response.headers["content-type"] !== "text/xml") {
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Expected XML, but got something else.",
-        }),
-      };
-    }
-
     return {
       statusCode: response.status,
-      body: response.data,
+      body: response.data, // Esto debe ser la respuesta de la API
     };
   } catch (error) {
     return {
