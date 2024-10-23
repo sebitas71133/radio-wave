@@ -17,10 +17,14 @@ export const Status = () => {
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const response = await axios.get(`/api/${stat}/stats?sid=1`);
+        const response = await axios.get(
+          `/.netlify/functions/radioStats?stat=${stat}`
+        );
+        console.log(response);
 
-        const parseDate = await parseXML(response.data);
-        dispatch(updateStationInfo(parseDate));
+        const parseDate = await parseXML(response);
+        console.log(parseDate);
+        // dispatch(updateStationInfo(parseDate));
       } catch (error) {
         dispatch(updateError(error));
         console.error(error);
