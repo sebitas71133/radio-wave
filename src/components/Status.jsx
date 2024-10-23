@@ -27,12 +27,10 @@ export const Status = () => {
     setIsLoading(true);
     setIsDisabled(true);
     try {
-      const response = await axios.get(`/api/${stat}/stats?sid=1`);
-      // const response = await axios.get(
-      //   `/.netlify/functions/radioStats?stat=${stat}`
-      // );
-
-      //`/.netlify/functions/radioStats?stat=${stat}`
+      //  const response = await axios.get(`/api/${stat}/stats?sid=1`);
+      const response = await axios.get(
+        `/.netlify/functions/radioStats?stat=${stat}`
+      );
 
       const parseDate = await parseXML(response.data);
 
@@ -99,7 +97,7 @@ export const Status = () => {
                 {stationInfo.SONGTITLE}
               </Typography>
               {/* STATION INFO */}
-              {stationInfo && stationInfo.SONGTITLE ? (
+              {stationInfo ? (
                 <Shazam songTitle={stationInfo.SONGTITLE} />
               ) : (
                 <div>No song title available</div>
@@ -112,7 +110,7 @@ export const Status = () => {
               </Typography>
             </Box>
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
             >
               <Chip
                 label={`${stationInfo.CURRENTLISTENERS} listeners`}

@@ -9,8 +9,9 @@ const Barras = () => {
     width: 4,
     marginRight: 3,
     backgroundColor: theme.palette.primary.main,
-    boxShadow: `0 0 10px ${theme.palette.primary.main}`,
+    // boxShadow: `0 0 10px ${theme.palette.primary.main}`,
     transition: "height 0.5s",
+    willChange: "height",
   }));
 
   const [barHeights, setBarHeights] = useState(Array(10).fill(10));
@@ -25,12 +26,11 @@ const Barras = () => {
       setBarHeights(barHeights.map(() => Math.random() * 40 + 10));
     };
 
-    //Se actualizara los valores de las barritas cada 0.1 segundos
     let intervalId;
     if (isPlaying) {
       // Breve retraso para dar efecto de reinicio visual tras cambiar estación
       setTimeout(() => {
-        intervalId = setInterval(animateBars, 100);
+        intervalId = setInterval(animateBars, 200);
       }, 500);
     }
 

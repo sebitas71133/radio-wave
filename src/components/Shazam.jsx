@@ -14,7 +14,7 @@ import {
 import { Search } from "@mui/icons-material";
 
 export const Shazam = (props) => {
-  const [shazamInfo, setShazamInfo] = useState(null);
+  const [shazamInfo, setShazamInfo] = useState([]);
   const [isShazamDialogOpen, setIsShazamDialogOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [title, setTitle] = useState("");
@@ -33,7 +33,7 @@ export const Shazam = (props) => {
         term: title,
         locale: "en-US",
         offset: "0",
-        limit: "1",
+        limit: "5",
       },
       headers: {
         "x-rapidapi-key": `${import.meta.env.VITE_SHAZAM_KEY}`,
@@ -43,9 +43,12 @@ export const Shazam = (props) => {
 
     try {
       const response = await axios.request(options);
-      console.log(response);
 
-      setShazamInfo(response.data.tracks.hits[0].track);
+      if (response.data && response.data.tracks && response.data.tracks.hits) {
+        setShazamInfo(response.data.tracks.hits); // Guardamos todos los hits
+      } else {
+        setShazamInfo([]); // Si no existen hits, dejamos el array vacío
+      }
     } catch (error) {
       console.error("Error searching Shazam:", error);
       setShazamInfo(null);
@@ -72,17 +75,23 @@ export const Shazam = (props) => {
         <DialogContent>
           {isSearching ? (
             <CircularProgress />
-          ) : shazamInfo ? (
+          ) : shazamInfo.length > 0 ? (
             <Box>
-              <Typography variant="h6">{shazamInfo.title}</Typography>
-              <Typography variant="subtitle1">{shazamInfo.subtitle}</Typography>
-              {shazamInfo.images && shazamInfo.images.coverart && (
-                <img
-                  src={shazamInfo.images.coverart}
-                  alt="Album Cover"
-                  style={{ width: "100%", marginTop: "10px" }}
-                />
-              )}
+              {shazamInfo.map((hit, index) => (
+                <Box key={index} mb={2}>
+                  <Typography variant="h6">{hit.track.title}</Typography>
+                  <Typography variant="subtitle1">
+                    {hit.track.subtitle}
+                  </Typography>
+                  {hit.track.images && hit.track.images.coverart && (
+                    <img
+                      src={hit.track.images.coverart}
+                      alt="Album Cover"
+                      style={{ width: "100%", marginTop: "10px" }}
+                    />
+                  )}
+                </Box>
+              ))}
             </Box>
           ) : (
             <Typography>No information found for this song.</Typography>

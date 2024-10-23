@@ -165,7 +165,7 @@ function App() {
 
             {/* BARRAS */}
 
-            <Barras></Barras>
+            {/* <Barras></Barras> */}
 
             {/* Audios */}
             <audio
