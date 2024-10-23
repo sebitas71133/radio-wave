@@ -15,9 +15,16 @@ const Apptheme = ({ children }) => {
           primary: {
             main: darkMode ? "#00ffff" : "#ff00ff",
           },
+          secondary: {
+            main: darkMode ? "#ff9100" : "#00e5ff",
+          },
           background: {
-            default: darkMode ? "#000000" : "#ffffff",
-            paper: darkMode ? "#1a1a1a" : "#f0f0f0",
+            default: darkMode ? "#121212" : "#f0f0f0",
+            paper: darkMode ? "#1e1e1e" : "#ffffff",
+          },
+          text: {
+            primary: darkMode ? "#ffffff" : "#000000",
+            secondary: darkMode ? "#b3e5fc" : "#311b92",
           },
         },
       }),

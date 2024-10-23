@@ -19,11 +19,13 @@ import {
   updateState,
   updateStation,
   updateVolume,
+  updateStat,
 } from "./store/slices/radioSlice";
 import { Brightness4, Brightness7, VolumeUp } from "@mui/icons-material";
 import Barras from "./components/Barras";
 import Play from "./components/Play";
 import { useEffect, useRef } from "react";
+import { Status } from "./components/Status";
 
 function App() {
   const { darkMode, station, stations, isPlaying, volume } = useSelector(
@@ -45,7 +47,10 @@ function App() {
   };
 
   const handleStationChange = (event) => {
-    dispatch(updateStation(event.target.value));
+    const id = event.target.value;
+    // const station = stations.find((station) => station.id === id);
+    // dispatch(updateStat(station.stats));
+    dispatch(updateStation(id));
   };
 
   const handleVolumeChange = (event, newValue) => {
@@ -122,26 +127,31 @@ function App() {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold", color: "primary.contrastText" }}
+                sx={{ fontWeight: "bold", color: "text.primary" }}
               >
                 Futuristic Radio
               </Typography>
               <Switch
                 checked={darkMode}
                 onChange={() => setDarkMode()}
-                icon={<Brightness7 />}
-                checkedIcon={<Brightness4 />}
-                color="default"
+                icon={<Brightness7 sx={{ color: "secondary.main" }} />}
+                checkedIcon={<Brightness4 sx={{ color: "secondary.main" }} />}
+                color="secondary"
               />
             </Box>
             <FormControl fullWidth margin="normal">
-              <InputLabel id="station-select-label">Station</InputLabel>
+              <InputLabel
+                id="station-select-label"
+                sx={{ color: "text.secondary" }}
+              >
+                Station
+              </InputLabel>
               <Select
                 labelId="station-select-label"
                 value={station}
                 label="Station"
                 onChange={handleStationChange}
-                sx={{ color: "primary.contrastText" }}
+                sx={{ color: "text.primary" }}
               >
                 {stations.map((s) => (
                   <MenuItem key={s.id} value={s.id}>
@@ -150,6 +160,10 @@ function App() {
                 ))}
               </Select>
             </FormControl>
+
+            {/* Info stations*/}
+
+            <Status></Status>
 
             {/* BARRAS */}
 
