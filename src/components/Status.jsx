@@ -23,8 +23,8 @@ export const Status = () => {
         console.log(response);
 
         const parseDate = await parseXML(response);
-        console.log(parseDate);
-        // dispatch(updateStationInfo(parseDate));
+
+        dispatch(updateStationInfo(parseDate));
       } catch (error) {
         dispatch(updateError(error));
         console.error(error);
