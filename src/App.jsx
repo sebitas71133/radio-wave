@@ -48,8 +48,6 @@ function App() {
 
   const handleStationChange = (event) => {
     const id = event.target.value;
-    // const station = stations.find((station) => station.id === id);
-    // dispatch(updateStat(station.stats));
     dispatch(updateStation(id));
   };
 
