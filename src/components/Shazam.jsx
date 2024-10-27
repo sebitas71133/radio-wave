@@ -12,55 +12,34 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  searchShazam,
+  setIsShazamDialogOpen,
+  setTitle,
+} from "../store/slices/shazamSilce";
 
 export const Shazam = (props) => {
-  const [shazamInfo, setShazamInfo] = useState([]);
-  const [isShazamDialogOpen, setIsShazamDialogOpen] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
-  const [title, setTitle] = useState("");
   const { songTitle } = props;
-  useEffect(() => {
-    setTitle(songTitle);
-  }, [songTitle]);
 
-  const searchShazam = async () => {
-    setIsSearching(true);
-    setIsShazamDialogOpen(true);
-    const options = {
-      method: "GET",
-      url: "https://shazam.p.rapidapi.com/search",
-      params: {
-        term: title,
-        locale: "en-US",
-        offset: "0",
-        limit: "5",
-      },
-      headers: {
-        "x-rapidapi-key": `${import.meta.env.VITE_SHAZAM_KEY}`,
-        "x-rapidapi-host": "shazam.p.rapidapi.com",
-      },
-    };
+  const { shazamInfo, isShazamDialogOpen, isSearching, title } = useSelector(
+    (state) => state.shazam
+  );
 
-    try {
-      const response = await axios.request(options);
+  const dispatch = useDispatch();
 
-      if (response.data && response.data.tracks && response.data.tracks.hits) {
-        setShazamInfo(response.data.tracks.hits); // Guardamos todos los hits
-      } else {
-        setShazamInfo([]); // Si no existen hits, dejamos el array vacío
-      }
-    } catch (error) {
-      console.error("Error searching Shazam:", error);
-      setShazamInfo(null);
-    } finally {
-      setIsSearching(false);
-    }
+  const handleClickButton = () => {
+    dispatch(searchShazam(title));
   };
+
+  useEffect(() => {
+    dispatch(setTitle(songTitle));
+  }, [songTitle]);
 
   return (
     <>
       <IconButton
-        onClick={searchShazam}
+        onClick={handleClickButton}
         size="small"
         sx={{ color: "secondary.main" }}
       >
@@ -69,7 +48,7 @@ export const Shazam = (props) => {
 
       <Dialog
         open={isShazamDialogOpen}
-        onClose={() => setIsShazamDialogOpen(false)}
+        onClose={() => dispatch(setIsShazamDialogOpen(false))}
       >
         <DialogTitle>Song Information</DialogTitle>
         <DialogContent>
@@ -98,7 +77,9 @@ export const Shazam = (props) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsShazamDialogOpen(false)}>Close</Button>
+          <Button onClick={() => dispatch(setIsShazamDialogOpen(false))}>
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </>

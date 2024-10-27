@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { parseXML } from "../../utils/xmlParser";
+import axios from "axios";
 
 const radioSlice = createSlice({
   name: "radio",
@@ -7,6 +9,8 @@ const radioSlice = createSlice({
     station: 8062,
     stat: 8010,
     isPlaying: false,
+    isLoadingStats: false,
+    isDisableButtonStats: false,
     volume: 30,
     stationInfo: {},
     error: false,
@@ -39,6 +43,14 @@ const radioSlice = createSlice({
       state.isPlaying = !state.isPlaying;
     },
 
+    updateIsLoadingStats: (state, action) => {
+      state.isLoadingStats = action.payload;
+    },
+
+    updateIsDisableButtonStats: (state, action) => {
+      state.isDisableButtonStats = action.payload;
+    },
+
     updateVolume: (state, action) => {
       state.volume = action.payload;
     },
@@ -57,6 +69,39 @@ const radioSlice = createSlice({
   },
 });
 
+export const getStats = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(updateIsLoadingStats(true));
+      dispatch(updateIsDisableButtonStats(true));
+      const state = getState();
+      const stat = state.radio.stat;
+
+      const options = {
+        method: "GET",
+        url: `/api/${stat}/stats`,
+        params: {
+          sid: 1,
+        },
+      };
+
+      // const response = await axios.get(
+      //   `/.netlify/functions/radioStats?stat=${stat}`
+      // );
+      const response = await axios.request(options);
+      const parseDate = await parseXML(response.data);
+
+      dispatch(updateStationInfo(parseDate));
+    } catch (error) {
+      console.error(error);
+      dispatch(updateError(error));
+    } finally {
+      dispatch(updateIsLoadingStats(false));
+      dispatch(updateIsDisableButtonStats(false));
+    }
+  };
+};
+
 export const radioReducer = radioSlice.reducer;
 export const {
   updateState,
@@ -66,4 +111,6 @@ export const {
   updateStat,
   updateStationInfo,
   updateError,
+  updateIsLoadingStats,
+  updateIsDisableButtonStats,
 } = radioSlice.actions;

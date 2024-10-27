@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  updateError,
-  updateStat,
-  updateStationInfo,
-} from "../store/slices/radioSlice";
-import { parseXML } from "../utils/xmlParser";
+import { getStats } from "../store/slices/radioSlice";
+
 import {
   Box,
   Chip,
@@ -18,45 +13,25 @@ import { MusicNote, Person, Refresh } from "@mui/icons-material";
 import { Shazam } from "./Shazam";
 
 export const Status = () => {
-  const { stat, stationInfo, error } = useSelector((state) => state.radio);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { stat, stationInfo, error, isLoadingStats, isDisableButtonStats } =
+    useSelector((state) => state.radio);
+
   const dispatch = useDispatch();
 
-  const fetchStatus = async () => {
-    setIsLoading(true);
-    setIsDisabled(true);
-    try {
-      //  const response = await axios.get(`/api/${stat}/stats?sid=1`);
-      const response = await axios.get(
-        `/.netlify/functions/radioStats?stat=${stat}`
-      );
-
-      const parseDate = await parseXML(response.data);
-
-      dispatch(updateStationInfo(parseDate));
-    } catch (error) {
-      dispatch(updateError(error));
-      console.error(error);
-    } finally {
-      setIsDisabled(false); // Rehabilitar el botón cuando termine la acción
-      setIsLoading(false);
-    }
-  };
   useEffect(() => {
-    fetchStatus();
+    dispatch(getStats());
   }, [stat]);
 
   if (error) {
     return <div>Error al obtener los datos: {error.message}</div>;
   }
 
-  if (isLoading) {
+  if (isLoadingStats) {
     return <div>Loading...</div>;
   }
 
   const handleRefreshStats = () => {
-    fetchStatus();
+    dispatch(getStats());
   };
 
   return (
@@ -86,7 +61,7 @@ export const Status = () => {
                 onClick={handleRefreshStats}
                 size="small"
                 sx={{ color: "secondary.main" }}
-                disabled={isDisabled}
+                disabled={isDisableButtonStats}
               >
                 <Refresh />
               </IconButton>

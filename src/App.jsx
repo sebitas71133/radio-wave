@@ -94,6 +94,7 @@ function App() {
             background: `linear-gradient(45deg, ${theme.palette.primary.dark} 0%, ${theme.palette.background.paper} 100%)`,
             overflow: "hidden",
             position: "relative",
+            minHeight: "420px",
           }}
         >
           <Box
