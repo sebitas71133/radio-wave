@@ -14,6 +14,8 @@ const radioSlice = createSlice({
     volume: 30,
     stationInfo: {},
     error: false,
+    favorites: [],
+    showFavorites: false,
     stations: [
       { id: 8069, stats: 8056, name: "Ambient Radio" },
       { id: 8061, stats: 8004, name: "Drum and Bass Radio" },
@@ -66,6 +68,39 @@ const radioSlice = createSlice({
     updateError: (state, action) => {
       state.error = action.payload;
     },
+
+    updateShowFavorites: (state, action) => {
+      state.showFavorites = !state.showFavorites;
+    },
+
+    toggleFavorite: (state, action) => {
+      const song = action.payload;
+      let newFavorites;
+      if (state.favorites.includes(song)) {
+        newFavorites = state.favorites.filter((fav) => fav !== song);
+        state.favorites = newFavorites;
+      } else {
+        newFavorites = [song, ...state.favorites];
+        state.favorites = newFavorites;
+      }
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    },
+
+    removeFavorite: (state, action) => {
+      const song = action.payload;
+
+      const newFavorites = state.favorites.filter((fav) => fav !== song);
+      state.favorites = newFavorites;
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+    },
+
+    getListFavorites: (state, action) => {
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("favorites")) || [];
+      if (storedFavorites) {
+        state.favorites = storedFavorites;
+      }
+    },
   },
 });
 
@@ -113,4 +148,8 @@ export const {
   updateError,
   updateIsLoadingStats,
   updateIsDisableButtonStats,
+  updateShowFavorites,
+  toggleFavorite,
+  getListFavorites,
+  removeFavorite,
 } = radioSlice.actions;

@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getStats } from "../store/slices/radioSlice";
+import {
+  getListFavorites,
+  getStats,
+  toggleFavorite,
+} from "../store/slices/radioSlice";
 
 import {
   Box,
@@ -9,14 +13,33 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { MusicNote, Person, Refresh } from "@mui/icons-material";
+import {
+  Favorite,
+  FavoriteBorder,
+  FavoriteSharp,
+  MusicNote,
+  Person,
+  Refresh,
+} from "@mui/icons-material";
 import { Shazam } from "./Shazam";
 
 export const Status = () => {
-  const { stat, stationInfo, error, isLoadingStats, isDisableButtonStats } =
-    useSelector((state) => state.radio);
+  const {
+    stat,
+    stationInfo,
+    error,
+    isLoadingStats,
+    isDisableButtonStats,
+    favorites,
+    showFavorites,
+  } = useSelector((state) => state.radio);
 
   const dispatch = useDispatch();
+
+  // Carga del localstorage
+  useEffect(() => {
+    dispatch(getListFavorites());
+  }, []);
 
   useEffect(() => {
     dispatch(getStats());
@@ -33,6 +56,10 @@ export const Status = () => {
   const handleRefreshStats = () => {
     dispatch(getStats());
   };
+
+  // const toggleFavorite = (song) => {
+  //   dispatch(toggleFavorite(song));
+  // };
 
   return (
     <>
@@ -77,6 +104,17 @@ export const Status = () => {
               ) : (
                 <div>No song title available</div>
               )}
+              <IconButton
+                size="small"
+                sx={{ color: "primary.main" }}
+                onClick={() => dispatch(toggleFavorite(stationInfo.SONGTITLE))}
+              >
+                {favorites.includes(stationInfo.SONGTITLE) ? (
+                  <Favorite />
+                ) : (
+                  <FavoriteBorder />
+                )}
+              </IconButton>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
               <Person sx={{ mr: 1, color: "primary.main" }} />

@@ -41,7 +41,7 @@ export const Shazam = (props) => {
       <IconButton
         onClick={handleClickButton}
         size="small"
-        sx={{ color: "secondary.main" }}
+        sx={{ color: "secondary.main", ml: 2 }}
       >
         <Search />
       </IconButton>
