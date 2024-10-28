@@ -88,7 +88,14 @@ export const Status = () => {
                 <Refresh />
               </IconButton>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                mb: 1,
+              }}
+            >
               <MusicNote sx={{ mr: 1, color: "primary.main" }} />
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 {stationInfo.SONGTITLE}

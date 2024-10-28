@@ -1,13 +1,12 @@
 import { Pause, PlayArrow, SkipNext, SkipPrevious } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-import React, { useRef } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePlaying, updateStation } from "../store/slices/radioSlice";
 
 const Play = (props) => {
   const { audioRef } = props;
   const {
-    darkMode,
     station,
     stations = [],
     isPlaying,

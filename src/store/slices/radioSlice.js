@@ -35,6 +35,7 @@ const radioSlice = createSlice({
 
     updateStation: (state, action) => {
       const id = action.payload;
+
       state.station = id;
 
       const station = state.stations.find((station) => station.id === id);
@@ -109,24 +110,26 @@ export const getStats = () => {
     try {
       dispatch(updateIsLoadingStats(true));
       dispatch(updateIsDisableButtonStats(true));
+      dispatch(updatePlaying());
       const state = getState();
       const stat = state.radio.stat;
 
-      const options = {
-        method: "GET",
-        url: `/api/${stat}/stats`,
-        params: {
-          sid: 1,
-        },
-      };
+      // const options = {
+      //   method: "GET",
+      //   url: `/api/${stat}/stats`,
+      //   params: {
+      //     sid: 1,
+      //   },
+      // };
 
-      // const response = await axios.get(
-      //   `/.netlify/functions/radioStats?stat=${stat}`
-      // );
-      const response = await axios.request(options);
+      const response = await axios.get(
+        `/.netlify/functions/radioStats?stat=${stat}`
+      );
+      //const response = await axios.request(options);
       const parseDate = await parseXML(response.data);
 
       dispatch(updateStationInfo(parseDate));
+      dispatch(updatePlaying());
     } catch (error) {
       console.error(error);
       dispatch(updateError(error));

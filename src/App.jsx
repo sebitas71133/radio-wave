@@ -4,15 +4,12 @@ import {
   CardContent,
   Collapse,
   FormControl,
-  Grid2,
   IconButton,
   InputLabel,
   List,
   ListItem,
-  ListItemSecondaryAction,
   ListItemText,
   MenuItem,
-  Paper,
   Select,
   Slider,
   Switch,
@@ -23,11 +20,9 @@ import { Card } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  updatePlaying,
   updateState,
   updateStation,
   updateVolume,
-  updateStat,
   updateShowFavorites,
   removeFavorite,
 } from "./store/slices/radioSlice";
@@ -40,9 +35,8 @@ import {
   Favorite,
   VolumeUp,
 } from "@mui/icons-material";
-import Barras from "./components/Barras";
 import Play from "./components/Play";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Status } from "./components/Status";
 
 function App() {
@@ -119,8 +113,8 @@ function App() {
             background: `linear-gradient(45deg, ${theme.palette.primary.dark} 0%, ${theme.palette.background.paper} 100%)`,
             overflow: "hidden",
             position: "relative",
-            minHeight: "420px",
-            // height: "450px",
+            minHeight: "632px",
+            //height: "560px",
           }}
         >
           <Box
@@ -193,6 +187,21 @@ function App() {
             {/* BARRAS */}
 
             {/* <Barras></Barras> */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                height: "120px",
+                mt: 2,
+              }}
+            >
+              {isPlaying ? (
+                <img src="/Animation1730146633016.gif" alt="sound-animation" />
+              ) : (
+                <></>
+              )}
+            </Box>
 
             {/* Audios */}
             <audio
