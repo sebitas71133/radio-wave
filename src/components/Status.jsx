@@ -16,12 +16,12 @@ import {
 import {
   Favorite,
   FavoriteBorder,
-  FavoriteSharp,
   MusicNote,
   Person,
   Refresh,
 } from "@mui/icons-material";
 import { Shazam } from "./Shazam";
+import { ShareButton } from "./ShareButton";
 
 export const Status = () => {
   const {
@@ -31,7 +31,6 @@ export const Status = () => {
     isLoadingStats,
     isDisableButtonStats,
     favorites,
-    showFavorites,
   } = useSelector((state) => state.radio);
 
   const dispatch = useDispatch();
@@ -56,10 +55,6 @@ export const Status = () => {
   const handleRefreshStats = () => {
     dispatch(getStats());
   };
-
-  // const toggleFavorite = (song) => {
-  //   dispatch(toggleFavorite(song));
-  // };
 
   return (
     <>
@@ -115,6 +110,12 @@ export const Status = () => {
                   <FavoriteBorder />
                 )}
               </IconButton>
+              {/* SHARE BUTTON */}
+
+              <ShareButton
+                songTitle={stationInfo.SONGTITLE || "Unknown SongTitle"}
+                stationTitle={stationInfo.SERVERTITLE}
+              />
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
               <Person sx={{ mr: 1, color: "primary.main" }} />
