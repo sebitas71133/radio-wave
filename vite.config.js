@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  //  base: "https://sebitas13.github.io/radio-web",
+  // base: "https://sebitas13.github.io/radio-web",
   // server: {
   //   proxy: {
   //     // Proxy para el puerto 8000

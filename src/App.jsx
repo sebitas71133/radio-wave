@@ -33,11 +33,13 @@ import {
   ExpandLess,
   ExpandMore,
   Favorite,
+  FileDownload,
   VolumeUp,
 } from "@mui/icons-material";
 import Play from "./components/Play";
 import { useEffect, useRef } from "react";
 import { Status } from "./components/Status";
+import { exportFavorites } from "./utils/exportFavorites";
 
 function App() {
   const {
@@ -186,7 +188,6 @@ function App() {
 
             {/* BARRAS */}
 
-            {/* <Barras></Barras> */}
             <Box
               sx={{
                 display: "flex",
@@ -230,21 +231,45 @@ function App() {
               />
             </Box>
 
+            {/* LISTA DE FAVORITOS */}
             <Box sx={{ mt: 2 }}>
-              <Typography
-                variant="subtitle1"
+              <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   cursor: "pointer",
                   color: "text.primary",
+                  justifyContent: "space-between",
                 }}
-                onClick={() => dispatch(updateShowFavorites())}
               >
-                <Favorite sx={{ mr: 1 }} />
-                Favorite songs
-                {showFavorites ? <ExpandLess /> : <ExpandMore />}
-              </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    color: "text.primary",
+                  }}
+                  onClick={() => dispatch(updateShowFavorites())}
+                >
+                  <Favorite sx={{ mr: 1 }} />
+                  Favorite songs
+                  {showFavorites ? <ExpandLess /> : <ExpandMore />}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    color: "text.primary",
+                  }}
+                  onClick={exportFavorites}
+                >
+                  Save
+                  <FileDownload />
+                </Typography>
+              </Box>
               <Collapse in={showFavorites} timeout="auto" unmountOnExit>
                 <List
                   sx={{
