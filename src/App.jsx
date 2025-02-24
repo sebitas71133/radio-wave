@@ -2,8 +2,13 @@ import "./App.css";
 import {
   Box,
   CardContent,
+  Collapse,
   FormControl,
+  IconButton,
   InputLabel,
+  List,
+  ListItem,
+  ListItemText,
   MenuItem,
   Select,
   Slider,
@@ -15,20 +20,37 @@ import { Card } from "@mui/material";
 import { animated, useSpring } from "react-spring";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  updatePlaying,
   updateState,
   updateStation,
   updateVolume,
+  updateShowFavorites,
+  removeFavorite,
 } from "./store/slices/radioSlice";
-import { Brightness4, Brightness7, VolumeUp } from "@mui/icons-material";
-import Barras from "./components/Barras";
+import {
+  Brightness4,
+  Brightness7,
+  Delete,
+  ExpandLess,
+  ExpandMore,
+  Favorite,
+  FileDownload,
+  VolumeUp,
+} from "@mui/icons-material";
 import Play from "./components/Play";
 import { useEffect, useRef } from "react";
+import { Status } from "./components/Status";
+import { exportFavorites } from "./utils/exportFavorites";
 
 function App() {
-  const { darkMode, station, stations, isPlaying, volume } = useSelector(
-    (state) => state.radio
-  );
+  const {
+    darkMode,
+    station,
+    stations,
+    isPlaying,
+    volume,
+    favorites,
+    showFavorites,
+  } = useSelector((state) => state.radio);
 
   const dispatch = useDispatch();
   const audioRef = useRef();
@@ -45,7 +67,8 @@ function App() {
   };
 
   const handleStationChange = (event) => {
-    dispatch(updateStation(event.target.value));
+    const id = event.target.value;
+    dispatch(updateStation(id));
   };
 
   const handleVolumeChange = (event, newValue) => {
@@ -76,6 +99,7 @@ function App() {
       <Box
         sx={{
           display: "flex",
+
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
@@ -91,6 +115,8 @@ function App() {
             background: `linear-gradient(45deg, ${theme.palette.primary.dark} 0%, ${theme.palette.background.paper} 100%)`,
             overflow: "hidden",
             position: "relative",
+            minHeight: "632px",
+            //height: "560px",
           }}
         >
           <Box
@@ -122,26 +148,31 @@ function App() {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ fontWeight: "bold", color: "primary.contrastText" }}
+                sx={{ fontWeight: "bold", color: "text.primary" }}
               >
                 Futuristic Radio
               </Typography>
               <Switch
                 checked={darkMode}
                 onChange={() => setDarkMode()}
-                icon={<Brightness7 />}
-                checkedIcon={<Brightness4 />}
-                color="default"
+                icon={<Brightness7 sx={{ color: "secondary.main" }} />}
+                checkedIcon={<Brightness4 sx={{ color: "secondary.main" }} />}
+                color="secondary"
               />
             </Box>
             <FormControl fullWidth margin="normal">
-              <InputLabel id="station-select-label">Station</InputLabel>
+              <InputLabel
+                id="station-select-label"
+                sx={{ color: "text.secondary" }}
+              >
+                Station
+              </InputLabel>
               <Select
                 labelId="station-select-label"
                 value={station}
                 label="Station"
                 onChange={handleStationChange}
-                sx={{ color: "primary.contrastText" }}
+                sx={{ color: "text.primary" }}
               >
                 {stations.map((s) => (
                   <MenuItem key={s.id} value={s.id}>
@@ -151,9 +182,27 @@ function App() {
               </Select>
             </FormControl>
 
+            {/* Info stations*/}
+
+            <Status></Status>
+
             {/* BARRAS */}
 
-            <Barras></Barras>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+                height: "120px",
+                mt: 2,
+              }}
+            >
+              {isPlaying ? (
+                <img src="/Animation1730146633016.gif" alt="sound-animation" />
+              ) : (
+                <></>
+              )}
+            </Box>
 
             {/* Audios */}
             <audio
@@ -164,7 +213,7 @@ function App() {
               onCanPlay={handleCanPlay}
             />
 
-            {/* Reproductos */}
+            {/* Reproductor */}
 
             <Play audioRef={audioRef} />
 
@@ -181,8 +230,82 @@ function App() {
                 max={100}
               />
             </Box>
+
+            {/* LISTA DE FAVORITOS */}
+            <Box sx={{ mt: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  color: "text.primary",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    color: "text.primary",
+                  }}
+                  onClick={() => dispatch(updateShowFavorites())}
+                >
+                  <Favorite sx={{ mr: 1 }} />
+                  Favorite songs
+                  {showFavorites ? <ExpandLess /> : <ExpandMore />}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    color: "text.primary",
+                  }}
+                  onClick={exportFavorites}
+                >
+                  Save
+                  <FileDownload />
+                </Typography>
+              </Box>
+              <Collapse in={showFavorites} timeout="auto" unmountOnExit>
+                <List
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    maxHeight: 200,
+                    // bgcolor: "background.paper",
+                    overflowY: "auto",
+                  }}
+                >
+                  {favorites.map((song, index) => (
+                    <ListItem
+                      key={index}
+                      secondaryAction={
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => dispatch(removeFavorite(song))}
+                        >
+                          <Delete />
+                        </IconButton>
+                      }
+                    >
+                      <ListItemText
+                        primary={song}
+                        sx={{ color: "text.secondary" }}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </Box>
           </CardContent>
         </AnimatedCard>
+
+        {/* Favorite List */}
       </Box>
     </>
   );
