@@ -213,7 +213,7 @@ function App() {
               onCanPlay={handleCanPlay}
             />
 
-            {/* Reproductos */}
+            {/* Reproductor */}
 
             <Play audioRef={audioRef} />
 

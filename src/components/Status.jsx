@@ -34,6 +34,7 @@ export const Status = () => {
   } = useSelector((state) => state.radio);
 
   const dispatch = useDispatch();
+  console.log(stat);
 
   // Carga del localstorage
   useEffect(() => {

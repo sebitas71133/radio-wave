@@ -114,17 +114,19 @@ export const getStats = () => {
       const state = getState();
       const stat = state.radio.stat;
 
-      const response = await axios.get(
-        `/.netlify/functions/radioStats?stat=${stat}`
-      );
-      // const response = await axios.request({
-      //   method: "GET",
-      //   url: `/api/${stat}/stats`,
-      //   params: {
-      //     sid: 1,
-      //   },
-      // });
+      // const response = await axios.get(
+      //   `/.netlify/functions/radioStats?stat=${stat}`
+      // );
+      const response = await axios.request({
+        method: "GET",
+        url: `/api/${stat}/stats`,
+        params: {
+          sid: 1,
+        },
+      });
       const parseDate = await parseXML(response.data);
+
+      console.log(parseDate);
 
       dispatch(updateStationInfo(parseDate));
       dispatch(updatePlaying());

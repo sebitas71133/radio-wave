@@ -14,7 +14,7 @@ export const handler = async (event) => {
 
   try {
     const response = await axios.get(url);
-
+    console.log(response);
     return {
       statusCode: response.status,
       body: response.data, // Esto debe ser la respuesta de la API
