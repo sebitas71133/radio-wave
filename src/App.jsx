@@ -2,6 +2,7 @@ import "./App.css";
 import {
   Box,
   CardContent,
+  CardMedia,
   Collapse,
   FormControl,
   IconButton,
@@ -198,7 +199,14 @@ function App() {
               }}
             >
               {isPlaying ? (
-                <img src="/Animation1730146633016.gif" alt="sound-animation" />
+                <CardMedia
+                  component={"img"}
+                  height={"auto"}
+                  //image="/radio-web/sound.gif"
+                  image="sound.gif"
+                  alt="animation"
+                  sx={{ position: "relative", top: "50px", width: "70%" }}
+                />
               ) : (
                 <></>
               )}
